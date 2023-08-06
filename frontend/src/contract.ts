@@ -1,4 +1,6 @@
 import { TokenUtility } from "./Token";
+// import axios from 'axios';
+
 
 enum ContratType {
     NONE = "none",
@@ -16,7 +18,7 @@ let StateHolder = {
     "token": new TokenUtility.Token(),
 };
 
-class HandelView<T extends null | { 
+class HandelView<T extends null | {
     getImports(): Array<string>,
     addToImport(import_val: string): void,
     deleteFromImports(import_val: string): void,
@@ -118,8 +120,8 @@ class HandelView<T extends null | {
                 this.instance!.removeAction(index);
                 spanIndicator.style.display = 'flex'
             }
-             
-            
+
+
             divContainer.append(spanIndicator);
             divContainer.append(inputContainerName);
             divContainer.append(addBtn);
@@ -129,8 +131,15 @@ class HandelView<T extends null | {
         this.createHR(this.actionView);
 
         document.getElementById('build')!.style.display = 'flex';
-        document.getElementById('build')!.onclick = () => {
-            this.instance!.buildContract();
+        document.getElementById('build')!.onclick = async () => {
+            const contractString = this.instance!.buildContract();
+            const res = await axios.post('http://localhost:5000/build',
+                { contract: contractString }, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+            })
+            console.log(res);
         }
     }
 
@@ -180,11 +189,11 @@ class HandelView<T extends null | {
             removeBtn.innerHTML = 'DELETE'
             removeBtn.classList.add('button-35');
             div3.append(removeBtn);
-    
+
             parent.append(div1)
             parent.append(div2)
             parent.append(div3)
-        }else if (itemLabel === viewType.STATES) {
+        } else if (itemLabel === viewType.STATES) {
             const div1 = document.createElement('div');
             const div2 = document.createElement('div');
             const div3 = document.createElement('div');
@@ -207,7 +216,7 @@ class HandelView<T extends null | {
             removeBtn.innerHTML = 'DELETE'
             removeBtn.classList.add('button-35');
             div3.append(removeBtn);
-    
+
             parent.append(div1)
             parent.append(div2)
             parent.append(div3)
@@ -237,7 +246,7 @@ class HandelView<T extends null | {
         if (partLabel === viewType.IMPORTS) {
             this.instance!.deleteFromImports(trimmedVal);
             inputElement.disabled = true;
-        } else if  (partLabel === viewType.STATES) {
+        } else if (partLabel === viewType.STATES) {
             this.instance!.removeState(trimmedVal);
         }
 
@@ -247,18 +256,18 @@ class HandelView<T extends null | {
     public addItemToParts(partLabel: viewType, inputElement: HTMLInputElement, submitBtn: HTMLButtonElement) {
         const trimmedVal = inputElement.value.trim();
 
-        if (trimmedVal === "")  {
+        if (trimmedVal === "") {
             alert('value of the text is needed');
             return;
         }
-        
+
         if (partLabel === viewType.IMPORTS) {
             this.instance!.addToImport(trimmedVal);
         } else if (partLabel === viewType.STATES) {
             const typeOfState = document.getElementById('inp-type') as HTMLInputElement;
             if (typeOfState) {
                 if (typeOfState.value === "") {
-                    alert('a value for type is requied!'); 
+                    alert('a value for type is requied!');
                     return;
                 }
                 this.instance!.addState(trimmedVal, typeOfState.value.trim());

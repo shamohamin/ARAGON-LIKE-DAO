@@ -99,5 +99,5 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "exclude": ["/home/amin/Documents/freeDAO/frontend/node_modules"],
-  "include": ["src/*.ts", "**/*.tsx"]
+  "include": ["./src/*.ts", "**/*.tsx"]
 }
