@@ -1,5 +1,5 @@
 import { TokenUtility } from "./Token";
-// import axios from 'axios';
+import axios from 'axios';
 
 
 enum ContratType {
@@ -133,13 +133,19 @@ class HandelView<T extends null | {
         document.getElementById('build')!.style.display = 'flex';
         document.getElementById('build')!.onclick = async () => {
             const contractString = this.instance!.buildContract();
-            const res = await axios.post('http://localhost:5000/build',
-                { contract: contractString }, {
+            try {
+                const res: {message: string} = await axios.post('http://localhost:5000/build',
+                    { contract: contractString }, {
                     headers: {
                         'Content-Type': 'application/json'
                     }
-            })
-            console.log(res);
+                }) as unknown as {message: string} 
+                console.log(res);
+            } catch (ex) {
+                console.log(ex)
+            }
+
+
         }
     }
 
