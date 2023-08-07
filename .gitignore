@@ -1,1 +1,3 @@
 /.vscode
+/backend/Contracts/target
+/backend/Contracts/TokenContract/src/lib.rs
