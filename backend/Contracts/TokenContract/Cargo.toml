@@ -1,0 +1,24 @@
+[package]
+name = "token-contract"
+version = "1.13.0"
+description = "Token Contract on Partisia Blockchain."
+edition = "2021"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+crate-type = ['rlib', 'cdylib']
+
+[dependencies]
+# This should be pbc_contract_common.workspace = true and so on, but contract-integration-testing does not support this.
+pbc_contract_common = { workspace = true }
+pbc_traits = { workspace = true }
+pbc_lib = { workspace = true }
+read_write_rpc_derive = { workspace = true }
+read_write_state_derive = { workspace = true }
+create_type_spec_derive = { workspace = true }
+pbc_contract_codegen = { workspace = true }
+
+
+[features]
+abi = ["pbc_contract_common/abi", "pbc_contract_codegen/abi", "pbc_traits/abi", "create_type_spec_derive/abi"]
